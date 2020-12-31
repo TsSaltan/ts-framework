@@ -1,19 +1,20 @@
 <?php
 namespace tsframe\module\database;
 
-use tsframe\exceptions\DatabaseException;
-use tsframe\module\database\Database;
 use tsframe\Hook;
+use tsframe\exception\DatabaseException;
+use tsframe\module\database\Database;
 
 define('TYPE_INT', \PDO::PARAM_INT);
 define('TYPE_STRING', \PDO::PARAM_STR);
 define('TYPE_BOOL', \PDO::PARAM_BOOL);
 
 	
-class Query{
+class Query {
 	public $sth;
 		
 	public function __construct($query){
+		if(!is_object(Database::$pdo)) throw new DatabaseException('Database connection does not initialized');
 		$this->sth = Database::$pdo->prepare($query);
 	}
 
