@@ -29,7 +29,7 @@
 
     "require": {
         "php": ">=7.1",
-        "tssaltan/ts-framework": "dev-3.0-dev",
+        "tssaltan/ts-framework": "dev-3.0-stable",
         "tssaltan/ts-framework-composer": "dev-master"
     },
 
