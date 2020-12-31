@@ -247,14 +247,10 @@
 								<?php break;
 
 							case 'select':?>
-								<select id="<?=$id?>" name="param[<?=$param->getKey()?>]" <? array_walk($params, function($value, $key){ ?><?=$key?>="<?=$value?>"<? }) ?> <?=$param->getRequired() ? 'required': ''?>>
-									<?
-									$index = 0;
-									foreach($param->getValues() as $value => $valueText):
-										$hasValue = $value != $index++; // Если передать массив только со значениями, то его цифровые ключи будут совпадать с index
-										$hasSelected = $value == $param->getValue();
-										?><option<?if($hasValue):?> value="<?=$value?>"<?endif?><?if($hasSelected):?> selected<?endif?>><?=$valueText?></option><?
-									endforeach?>
+								<select id="<?=$id?>" name="param[<?=$param->getKey()?>]" <?php  array_walk($param->getParams(), function($value, $key){ ?><?=$key?>="<?=$value?>"<?php  }) ?> <?=$param->getRequired() ? 'required': ''?>>
+									<?php foreach($param->getValues() as $value => $valueText):?>
+									<option value="<?=$value?>" <?=($value==$param->getValue()) ? "selected" : ''?>><?=$valueText?></option>
+									<?php endforeach?>
 								</select>
 
 								<?php break;
