@@ -16,6 +16,23 @@ class Task {
     }
 
     /**
+     * Обновить параметры из базы данных
+     */
+    public function refreshParams(): bool {
+        $query = Database::exec("SELECT *, UNIX_TIMESTAMP(`last-exec`) ts FROM `tasks` WHERE `name` = :name")
+                        ->bind('name', $this->name)
+                        ->fetch();
+
+        foreach ($query as $task) {
+            $this->period = $task['period'];
+            $this->lastExec = ($task['ts'] == 0) ? time() : $task['ts'];
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Получить следующее время запуска
      * @return [type] [description]
      */

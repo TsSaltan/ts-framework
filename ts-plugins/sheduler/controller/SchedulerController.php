@@ -13,12 +13,6 @@ use tsframe\module\scheduler\Scheduler;
  * @route GET /scheduler-task/
  */
 class SchedulerController extends AbstractController{
-	protected static $log = true;
-
-	public static function setLog(bool $log){
-		self::$log = $log;
-	}
-
 	public function response(){
 		// Для браузера - никакого доступа
 		if(Http::isBrowser()){
@@ -31,6 +25,8 @@ class SchedulerController extends AbstractController{
 		Hook::call('scheduler.start', [$tasks], null, function(){});
 
 		foreach ($tasks as $task){
+			$task->refreshParams();
+
 			if($task->runRequired()){
 				$logData = [
 					'now' => time(), 
@@ -38,20 +34,20 @@ class SchedulerController extends AbstractController{
 					'period' => $task->getPeriod(), 
 				];
 
+				$task->update();
 				Hook::call('scheduler.task.' . $task->getName(), [$task], function($return) use ($task, $logData){
 					if($return !== false){
 						$lresult = 'successfully';
-						$task->update();
 					} else {
 						$lresult = 'unsuccessfully';
 					}
 
-					if(self::$log) Logger::scheduler()->debug('Task "'.$task->getName().'" '.$lresult.' runned', $logData);
+					Logger::scheduler()->debug('Task "'.$task->getName().'" started ' . $lresult, $logData);
 
 				}, function($error) use ($task, $logData){
 					$logData['error_message'] = $error->getMessage();
 					$logData['error_code'] = $error->getCode();
-					if(self::$log) Logger::scheduler()->error('Catch exception ('.get_class($error).') on running task "'.$task->getName().'"', $logData);
+					Logger::scheduler()->error('Task "'.$task->getName().'" throws exception ['.get_class($error).']', $logData);
 				});
 			}
 		}
