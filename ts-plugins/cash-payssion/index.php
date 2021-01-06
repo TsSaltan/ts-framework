@@ -34,7 +34,7 @@ Hook::registerOnce('plugin.install', function(){
 		PluginInstaller::withKey('payssion.production_mode')
 						->setType('select')
 						->setDescription("Production mode")
-						->setValues([1 => "Disabled / Test mode", 0 => "Enabled / Production mode"])
+						->setValues([0 => "Disabled / Test mode", 1 => "Enabled / Production mode"])
 						->setRequired(true),
 
 		PluginInstaller::withKey('payssion.payment_types')

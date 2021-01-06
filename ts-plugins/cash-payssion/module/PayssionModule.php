@@ -133,7 +133,7 @@ class PayssionModule {
         try {
             $currency = Cash::getCurrency();
             $orderId = Cash::createPayId($forUser->get('id'));
-            $description = 'Пополнение баланса пользователя "' . $forUser->get('login') . '" (ID:' . $forUser->get('login') . ') через Payssion / ' . $amount . ' ' . $currency . ' / ID платежа: ' . $orderId;
+            $description = 'Пополнение баланса пользователя ' . $forUser->get('login') . ' (ID:' . $forUser->get('id') . ') через Payssion / ' . $amount . ' ' . $currency . ' / ID платежа: ' . $orderId;
             $response = $payssion->create([
                 'amount' => $amount,
                 'currency' => $currency,
